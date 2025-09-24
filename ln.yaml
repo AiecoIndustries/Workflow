@@ -1,0 +1,23 @@
+name: LinkedIn Automation
+
+on:
+  schedule:
+    - cron: '0 10 * * MON'  # Every Monday at 10:00 UTC
+
+jobs:
+  post_linkedin:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: pip install requests openai python-dotenv schedule
+      - name: Run LinkedIn bot
+        env:
+          LINKEDIN_ACCESS_TOKEN: ${{ secrets.LINKEDIN_ACCESS_TOKEN }}
+          COMPANY_URN: ${{ secrets.COMPANY_URN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: python postbot.py
